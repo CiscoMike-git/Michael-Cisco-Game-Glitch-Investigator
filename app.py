@@ -12,7 +12,7 @@ def get_range_for_difficulty(difficulty: str): # FIXME: Bug ID #3
     return 1, 100
 
 
-def parse_guess(raw: str):
+def parse_guess(raw: str): # FIXME: Bug ID #7
     if raw is None:
         return False, None, "Enter a guess."
 
@@ -39,7 +39,7 @@ def update_score(current_score: int, outcome: str, attempt_number: int):
         return current_score + points
 
     if outcome == "Too High":
-        if attempt_number % 2 == 0:
+        if attempt_number % 2 == 0: # FIXME: Bug ID #10
             return current_score + 5
         return current_score - 5
 
@@ -61,7 +61,7 @@ difficulty = st.sidebar.selectbox(
     index=1,
 )
 
-attempt_limit_map = {
+attempt_limit_map = { # FIXME: Bug ID #3
     "Easy": 6,
     "Normal": 8,
     "Hard": 5,
@@ -77,7 +77,7 @@ if "secret" not in st.session_state:
     st.session_state.secret = random.randint(low, high)
 
 if "attempts" not in st.session_state:
-    st.session_state.attempts = 1
+    st.session_state.attempts = 1 # FIXME: Bug ID #11
 
 if "score" not in st.session_state:
     st.session_state.score = 0
@@ -91,7 +91,7 @@ if "history" not in st.session_state:
 st.subheader("Make a guess")
 
 st.info(
-    f"Guess a number between 1 and 100. "
+    f"Guess a number between 1 and 100. " # FIXME: Bug ID #8
     f"Attempts left: {attempt_limit - st.session_state.attempts}"
 )
 
@@ -115,9 +115,9 @@ with col2:
 with col3:
     show_hint = st.checkbox("Show hint", value=True)
 
-if new_game:
+if new_game: # FIXME: Bug ID #4, Bug ID #5, Bug ID #6
     st.session_state.attempts = 0
-    st.session_state.secret = random.randint(1, 100)
+    st.session_state.secret = random.randint(1, 100) # FIXME: Bug ID #9
     st.success("New game started.")
     st.rerun()
 
@@ -129,7 +129,7 @@ if st.session_state.status != "playing":
     st.stop()
 
 if submit:
-    st.session_state.attempts += 1
+    st.session_state.attempts += 1 # FIXME: Bug ID #7
 
     ok, guess_int, err = parse_guess(raw_guess)
 
@@ -139,7 +139,7 @@ if submit:
     else:
         st.session_state.history.append(guess_int)
 
-        if st.session_state.attempts % 2 == 0:
+        if st.session_state.attempts % 2 == 0: # FIXME: Bug ID #2 - AI affirmed, Not convinced, Review prior to change
             secret = str(st.session_state.secret)
         else:
             secret = st.session_state.secret

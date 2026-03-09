@@ -17,6 +17,8 @@ Answer each question in 3 to 5 sentences. Be specific and honest about what actu
     7. User is able to input data outside of denoted range and the guess still counts against the user's attempts.
     8. The UI element under the "Make a guess" title has the text "Guess a number between 1 and 100..." irrelavent of the set difficulty.
     9. The secret number is always a random number between 1 and 100, irrelavent of the set difficulty.
+    10. On even submission attempts (i.e. 0, 2, 4) when the player guesses too high, score is increased by 5 points instead of being decreased by that amount.
+    11. On game's initialization, the "attempts" variable is set to 1 (i.e. the user has submitted one guess), number of attempts should always start at 0.
 
 ---
 
@@ -25,7 +27,7 @@ Answer each question in 3 to 5 sentences. Be specific and honest about what actu
 - Which AI tools did you use on this project (for example: ChatGPT, Gemini, Copilot)?
     Claude Code
 - Give one example of an AI suggestion that was correct (including what the AI suggested and how you verified the result).
-
+    The AI's suggestion to fix Bug ID #1 correctly associated that the second index (string) of the return array for check_guess() was incorrectly coded (i.e. correct returns were inversed between the two posiible outcomes). After reviewing the AI's suggestion, and deeming it a viable solution through logical deduction, I allowed the AI to make the alteration to the code. After the change was made, I reviewed the altered code to ensure no erroneous changes were made. Finally, I relaunched the application and operated the software to confirm a change of behavior into the expected execution.
 - Give one example of an AI suggestion that was incorrect or misleading (including what the AI suggested and how you verified the result).
 
     
@@ -34,17 +36,23 @@ Answer each question in 3 to 5 sentences. Be specific and honest about what actu
 ## 3. Debugging and testing your fixes
 
 - How did you decide whether a bug was really fixed?
+
 - Describe at least one test you ran (manual or using pytest)  
   and what it showed you about your code.
+    
 - Did AI help you design or understand any tests? How?
+
 
 ---
 
 ## 4. What did you learn about Streamlit and state?
 
 - In your own words, explain why the secret number kept changing in the original app.
+    The secret number changed in the original app due to lines 92-93 and lines 134, 136. Lines 92-93 initialized the "secret" variable upon the application's opening, creating the variable at runtime and providing it with a initial value. During the program's execution, when the "new game" button was pressed, the program would nest into line 134's if statement and execute line 136, which gave a new value to the variable "secret".
 - How would you explain Streamlit "reruns" and session state to a friend who has never used Streamlit?
+
 - What change did you make that finally gave the game a stable secret number?
+    
 
 ---
 
@@ -52,5 +60,8 @@ Answer each question in 3 to 5 sentences. Be specific and honest about what actu
 
 - What is one habit or strategy from this project that you want to reuse in future labs or projects?
   - This could be a testing habit, a prompting strategy, or a way you used Git.
+
 - What is one thing you would do differently next time you work with AI on a coding task?
+    The next time I work with AI on a coding task, especially if its a project or exercise, I want to preface the AI to not give me answers before I ask for them. I found that upon doing the initial "#file:app.py" command, the AI appeared to give me the predetermined answers, as outlined by CodePath, to the project. This made trying to ernestly find and repair additional bugs in a learning manner difficult as I suddenly knew CodePath's intenstions rather than needing to critically think myself.
 - In one or two sentences, describe how this project changed the way you think about AI generated code.
+    Prior to this project, I interpeted "Vibe/AI Coding" as asking an AI to generate code and going with whatever it produced. I am pleasantly surprised to learn it is, when used correctly, a tool to assist coding rather than a solution generator.
