@@ -14,3 +14,23 @@ def test_guess_too_low():
     # If secret is 50 and guess is 40, hint should be "Too Low"
     result = check_guess(40, 50)
     assert result == "Too Low"
+
+def test_hint_says_go_lower_when_guess_too_high():
+    # Guess above the secret should hint to go lower
+    _, message = check_guess(75, 50)
+    assert "LOWER" in message
+
+def test_hint_says_go_higher_when_guess_too_low():
+    # Guess below the secret should hint to go higher
+    _, message = check_guess(25, 50)
+    assert "HIGHER" in message
+
+def test_hint_not_inverted_high():
+    # Ensure "HIGHER" is NOT shown when guess is too high
+    _, message = check_guess(75, 50)
+    assert "HIGHER" not in message
+
+def test_hint_not_inverted_low():
+    # Ensure "LOWER" is NOT shown when guess is too low
+    _, message = check_guess(25, 50)
+    assert "LOWER" not in message
