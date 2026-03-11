@@ -139,10 +139,7 @@ if submit:
     else:
         st.session_state.history.append(guess_int)
 
-        if st.session_state.attempts % 2 == 0: # FIXME: Bug ID #2 - AI affirmed, Not convinced, Review prior to change
-            secret = str(st.session_state.secret)
-        else:
-            secret = st.session_state.secret
+        secret = st.session_state.secret # FIXME: Bug ID #2 - fix last, bug may be a multiple of other bugs
 
         outcome, message = check_guess(guess_int, secret)
 
