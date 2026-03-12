@@ -105,9 +105,12 @@ with col2:
 with col3:
     show_hint = st.checkbox("Show hint", value=True)
 
-if new_game: # FIXME: Bug ID #4, Bug ID #5, Bug ID #6
+if new_game: # FIXME: Bug ID #4
     st.session_state.attempts = 0
-    st.session_state.secret = random.randint(1, 100) # FIXME: Bug ID #9
+    st.session_state.secret = random.randint(low, high) # FIX: Bug ID #9 - Replaced the hardcoded 1-100 range with the difficulty-based low, high range via Claude Code
+    st.session_state.status = "playing" # FIX: Bug ID #5 - Added assignment via Claude Code, Reset status so guesses can be submitted again
+    st.session_state.history = [] # FIX: Bug ID #6 - Added assignment via Claude Code, Clear history between games
+    st.session_state.score = 0 # FIX: Bug ID #6 - Added assignment via Claude Code, Clear score between games
     st.success("New game started.")
     st.rerun()
 
