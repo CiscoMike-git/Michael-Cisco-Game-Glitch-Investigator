@@ -1,15 +1,6 @@
 import random
 import streamlit as st
-from logic_utils import check_guess
-
-def get_range_for_difficulty(difficulty: str): # FIXME: Bug ID #3
-    if difficulty == "Easy":
-        return 1, 20
-    if difficulty == "Normal":
-        return 1, 100
-    if difficulty == "Hard":
-        return 1, 50
-    return 1, 100
+from logic_utils import check_guess, get_range_for_difficulty
 
 
 def parse_guess(raw: str): # FIXME: Bug ID #7
@@ -61,9 +52,11 @@ difficulty = st.sidebar.selectbox(
     index=1,
 )
 
-attempt_limit_map = { # FIXME: Bug ID #3
-    "Easy": 6,
-    "Normal": 8,
+attempt_limit_map = {
+    # FIX: Bug ID #3 - Swapped Easy/Normal attempt limits via Claude Code, Progressive difficulty: Easy
+    # (most forgiving) → Hard (fewest attempts)
+    "Easy": 8,
+    "Normal": 6,
     "Hard": 5,
 }
 attempt_limit = attempt_limit_map[difficulty]

@@ -1,6 +1,12 @@
 def get_range_for_difficulty(difficulty: str):
+    # FIX: Bug ID #3 - Swapped Normal/Hard ranges via Claude Code, Progressive difficulty: Easy (smallest
+    # range) → Hard (broadest range)
     """Return (low, high) inclusive range for a given difficulty."""
-    raise NotImplementedError("Refactor this function from app.py into logic_utils.py")
+    if difficulty == "Easy":
+        return 1, 20
+    if difficulty == "Normal":
+        return 1, 50
+    return 1, 100  # Hard, or any unrecognized difficulty
 
 
 def parse_guess(raw: str):
@@ -12,7 +18,8 @@ def parse_guess(raw: str):
     raise NotImplementedError("Refactor this function from app.py into logic_utils.py")
 
 
-def check_guess(guess, secret): # FIX: Bug #1 - Moved check_guess() (app->logic_utils) & swapped return[2] strings for incorrect guesses via Claude Code
+def check_guess(guess, secret):
+    # FIX: Bug ID #1 - Swapped return[2] strings for incorrect guesses via Claude Code
     """
     Compare guess to secret and return (outcome, message).
 
