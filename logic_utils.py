@@ -2,12 +2,13 @@ def get_range_for_difficulty(difficulty: str):
     # FIX: Bug ID #3 - Swapped Normal/Hard ranges via Claude Code, Progressive difficulty: Easy (smallest
     # range) → Hard (broadest range)
     """Return (low, high) inclusive range for a given difficulty."""
-    if difficulty == "Easy":
-        return 1, 20
-    if difficulty == "Normal":
-        return 1, 50
-    return 1, 100  # Hard, or any unrecognized difficulty
-
+    match difficulty:
+        case "Easy":
+            return 1, 20
+        case "Normal":
+            return 1, 50
+        case _:
+            return 1, 100  # Hard, or any unrecognized difficulty
 
 def parse_guess(raw: str):
     """

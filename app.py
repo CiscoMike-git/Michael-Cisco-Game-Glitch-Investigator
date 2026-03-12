@@ -2,7 +2,6 @@ import random
 import streamlit as st
 from logic_utils import check_guess, get_range_for_difficulty
 
-
 def parse_guess(raw: str): # FIXME: Bug ID #7
     if raw is None:
         return False, None, "Enter a guess."
@@ -19,8 +18,6 @@ def parse_guess(raw: str): # FIXME: Bug ID #7
         return False, None, "That is not a number."
 
     return True, value, None
-
-
 
 def update_score(current_score: int, outcome: str, attempt_number: int):
     if outcome == "Win":
