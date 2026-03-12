@@ -1,23 +1,6 @@
 import random
 import streamlit as st
-from logic_utils import check_guess, get_range_for_difficulty, update_score
-
-def parse_guess(raw: str): # FIXME: Bug ID #7
-    if raw is None:
-        return False, None, "Enter a guess."
-
-    if raw == "":
-        return False, None, "Enter a guess."
-
-    try:
-        if "." in raw:
-            value = int(float(raw))
-        else:
-            value = int(raw)
-    except Exception:
-        return False, None, "That is not a number."
-
-    return True, value, None
+from logic_utils import check_guess, get_range_for_difficulty, parse_guess, update_score
 
 st.set_page_config(page_title="Glitchy Guesser", page_icon="🎮")
 
@@ -105,14 +88,13 @@ if st.session_state.status != "playing":
     st.stop()
 
 if submit:
-    st.session_state.attempts += 1 # FIXME: Bug ID #7
-
-    ok, guess_int, err = parse_guess(raw_guess)
+    ok, guess_int, err = parse_guess(raw_guess, low, high)
 
     if not ok:
         st.session_state.history.append(raw_guess)
         st.error(err)
     else:
+        st.session_state.attempts += 1
         st.session_state.history.append(guess_int)
 
         secret = st.session_state.secret # FIXME: Bug ID #2 - fix last, bug may be a multiple of other bugs

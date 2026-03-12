@@ -1,4 +1,4 @@
-from logic_utils import check_guess, get_range_for_difficulty, update_score
+from logic_utils import check_guess, get_range_for_difficulty, parse_guess, update_score
 
 def test_winning_guess():
     # If the secret is 50 and guess is 50, it should be a win
@@ -51,3 +51,53 @@ def test_update_score_too_low_penalizes():
 def test_update_score_unknown_outcome_unchanged():
     # Unrecognized outcome should leave score unchanged
     assert update_score(100, "Draw", 3) == 100
+
+def test_parse_guess_valid_integer():
+    # A plain integer within range should succeed
+    ok, value, err = parse_guess("10", 1, 20)
+    assert ok is True and value == 10 and err is None
+
+def test_parse_guess_integer_equivalent_decimal():
+    # "5.0" is integer-equivalent and should be accepted
+    ok, value, err = parse_guess("5.0", 1, 20)
+    assert ok is True and value == 5 and err is None
+
+def test_parse_guess_non_integer_decimal_rejected():
+    # "3.7" is not integer-equivalent and should be rejected
+    ok, value, err = parse_guess("3.7", 1, 20)
+    assert ok is False and value is None and err is not None
+
+def test_parse_guess_non_numeric_rejected():
+    # A word should be rejected as not a number
+    ok, value, err = parse_guess("abc", 1, 20)
+    assert ok is False and value is None and err is not None
+
+def test_parse_guess_empty_string_rejected():
+    # Empty input should prompt the user to enter a guess
+    ok, value, err = parse_guess("", 1, 20)
+    assert ok is False and value is None and err is not None
+
+def test_parse_guess_none_rejected():
+    # None input should prompt the user to enter a guess
+    ok, value, err = parse_guess(None, 1, 20)
+    assert ok is False and value is None and err is not None
+
+def test_parse_guess_below_range_rejected():
+    # 0 is below the Easy range (1–20) and should be rejected
+    ok, value, err = parse_guess("0", 1, 20)
+    assert ok is False and value is None and err is not None
+
+def test_parse_guess_above_range_rejected():
+    # 21 is above the Easy range (1–20) and should be rejected
+    ok, value, err = parse_guess("21", 1, 20)
+    assert ok is False and value is None and err is not None
+
+def test_parse_guess_boundary_low():
+    # The low boundary itself should be accepted
+    ok, value, _ = parse_guess("1", 1, 20)
+    assert ok is True and value == 1
+
+def test_parse_guess_boundary_high():
+    # The high boundary itself should be accepted
+    ok, value, _ = parse_guess("20", 1, 20)
+    assert ok is True and value == 20

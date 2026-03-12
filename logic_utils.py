@@ -10,13 +10,33 @@ def get_range_for_difficulty(difficulty: str):
         case _:
             return 1, 100  # Hard, or any unrecognized difficulty
 
-def parse_guess(raw: str):
+def parse_guess(raw: str, low: int, high: int): # FIX: Bug ID #7 - Added range params, integer-equivalent decimal check, and range validation via Claude Code
     """
     Parse user input into an int guess.
 
     Returns: (ok: bool, guess_int: int | None, error_message: str | None)
     """
-    raise NotImplementedError("Refactor this function from app.py into logic_utils.py")
+    if raw is None:
+        return False, None, "Enter a guess."
+
+    if raw == "":
+        return False, None, "Enter a guess."
+
+    try:
+        if "." in raw:
+            float_val = float(raw)
+            if float_val != int(float_val):
+                return False, None, "Decimals are not allowed."
+            value = int(float_val)
+        else:
+            value = int(raw)
+    except Exception:
+        return False, None, "That is not a number."
+
+    if not (low <= value <= high):
+        return False, None, f"Guess must be between {low} and {high}."
+
+    return True, value, None
 
 
 def check_guess(guess, secret):
