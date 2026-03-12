@@ -67,7 +67,7 @@ if "secret" not in st.session_state:
     st.session_state.secret = random.randint(low, high)
 
 if "attempts" not in st.session_state:
-    st.session_state.attempts = 1 # FIXME: Bug ID #11
+    st.session_state.attempts = 0 # FIX: Bug ID #11 - Corrected initial attempts from 1 to 0 via Claude Code
 
 if "score" not in st.session_state:
     st.session_state.score = 0
@@ -81,7 +81,7 @@ if "history" not in st.session_state:
 st.subheader("Make a guess")
 
 st.info(
-    f"Guess a number between 1 and 100. " # FIXME: Bug ID #8
+    f"Guess a number between {low} and {high}. " # FIX: Bug ID #8 - Replaced hardcoded range with dynamic low/high variables via Claude Code
     f"Attempts left: {attempt_limit - st.session_state.attempts}"
 )
 
