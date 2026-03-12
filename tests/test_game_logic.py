@@ -1,4 +1,4 @@
-from logic_utils import check_guess, get_range_for_difficulty
+from logic_utils import check_guess, get_range_for_difficulty, update_score
 
 def test_winning_guess():
     # If the secret is 50 and guess is 50, it should be a win
@@ -31,3 +31,23 @@ def test_difficulty_ranges_scale_progressively():
     _, normal_high = get_range_for_difficulty("Normal")
     _, hard_high = get_range_for_difficulty("Hard")
     assert easy_high < normal_high < hard_high
+
+def test_update_score_win_early_attempt():
+    # Winning on attempt 1 should give 100 - 10*(1+1) = 80 points
+    assert update_score(0, "Win", 1) == 80
+
+def test_update_score_win_minimum_points():
+    # Win points floor at 10 regardless of late attempt number
+    assert update_score(0, "Win", 100) == 10
+
+def test_update_score_too_high_penalizes():
+    # "Too High" should always deduct 5, not reward +5 on even attempts (Bug #10 fix)
+    assert update_score(50, "Too High", 2) == 45
+
+def test_update_score_too_low_penalizes():
+    # "Too Low" should always deduct 5
+    assert update_score(50, "Too Low", 1) == 45
+
+def test_update_score_unknown_outcome_unchanged():
+    # Unrecognized outcome should leave score unchanged
+    assert update_score(100, "Draw", 3) == 100

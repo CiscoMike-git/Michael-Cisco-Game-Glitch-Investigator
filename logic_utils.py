@@ -45,4 +45,16 @@ def check_guess(guess, secret):
 
 def update_score(current_score: int, outcome: str, attempt_number: int):
     """Update score based on outcome and attempt number."""
-    raise NotImplementedError("Refactor this function from app.py into logic_utils.py")
+    if outcome == "Win":
+        points = 100 - 10 * (attempt_number + 1)
+        if points < 10:
+            points = 10
+        return current_score + points
+
+    if outcome == "Too High":
+        return current_score - 5  # FIX: Bug ID #10 - Removed incorrect even/odd branching that rewarded +5 on even attempts via Claude Code, "Too High" should always penalize identical to "Too Low"
+
+    if outcome == "Too Low":
+        return current_score - 5
+
+    return current_score
