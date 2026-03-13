@@ -44,6 +44,9 @@ if "status" not in st.session_state:
 if "history" not in st.session_state:
     st.session_state.history = []
 
+if "difficulty" not in st.session_state:
+    st.session_state.difficulty = difficulty
+
 st.subheader("Make a guess")
 
 st.info(
@@ -55,7 +58,7 @@ with st.expander("Developer Debug Info"):
     st.write("Secret:", st.session_state.secret)
     st.write("Attempts:", st.session_state.attempts)
     st.write("Score:", st.session_state.score)
-    st.write("Difficulty:", difficulty)
+    st.write("Difficulty:", st.session_state.difficulty)
     st.write("History:", st.session_state.history)
 
 raw_guess = st.text_input(
@@ -71,7 +74,8 @@ with col2:
 with col3:
     show_hint = st.checkbox("Show hint", value=True)
 
-if new_game: # FIXME: Bug ID #4
+if new_game or difficulty != st.session_state.difficulty: # FIX: Bug ID #4 - Trigger reset on difficulty change via Claude Code
+    st.session_state.difficulty = difficulty
     st.session_state.attempts = 0
     st.session_state.secret = random.randint(low, high) # FIX: Bug ID #9 - Replaced the hardcoded 1-100 range with the difficulty-based low, high range via Claude Code
     st.session_state.status = "playing" # FIX: Bug ID #5 - Added assignment via Claude Code, Reset status so guesses can be submitted again
