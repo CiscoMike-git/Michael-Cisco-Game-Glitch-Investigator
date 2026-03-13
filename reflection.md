@@ -5,20 +5,21 @@ Answer each question in 3 to 5 sentences. Be specific and honest about what actu
 ## 1. What was broken when you started?
 
 - What did the game look like the first time you ran it?
-    The game appears to be a number guessing game with three difficulty settings. It proposes to allow the user to submit a guess, change difficulty, restart the game, and the option to get a hint after each guess. When opted-in, the post-guess hint will indicate to the user the direction their guesses should move, higher or lower.
+    The game appears to be a number guessing game with three difficulty settings. It proposes to allow the user to submit a guess, change difficulty, restart the game, and the option to get a hint after each guess. When opted-in, the post-guess hint will indicate to the user the direction their guesses should move, higher or lower. However, there are significant bugs which prevent the software from executing as intended.
 - List at least two concrete bugs you noticed at the start  
   (for example: "the secret number kept changing" or "the hints were backwards").
     1. If the "show hint" option is on and the player inputs an incorrect number, the hint output will falsely prompt the user, causing their guesses to shift further away form the secret number rather than closer to it.
-    2. If the "show hint" option is on and the player consecutively inputs two incorrrect numbers, with one on each side of the secret number, then a hint output will not be provided.
-    3. "Normal" mode sets the secret number between 1-100 while providing the user eigth guesses while "Hard" mode does so between 1-50 with five guesses.
-    4. Secret number does not change when moving difficulty, meaning secret number can be out of range when moving to a smaller ranged difficulty.
-    5. "New Game" button does not change game state while resetting game, meaning if the user already won or lost, they are unable to submit any more guesses.
-    6. "History" and "Score" data persists between games.
-    7. User is able to input data outside of denoted range and the guess still counts against the user's attempts.
-    8. The UI element under the "Make a guess" title has the text "Guess a number between 1 and 100..." irrelavent of the set difficulty.
-    9. The secret number is always a random number between 1 and 100, irrelavent of the set difficulty.
+    2. If the "show hint" option is on and the player submits two consecutive inputs that would uniquely branch within the code, then a hint output will not be displayed contrary to intent.
+    3. The various difficulty settings are as followed: "Easy" mode (Range: 1-20, Attempts: 6), "Normal" mode (Range: 1-100, Attempts: 8), and "Hard" mode (Range: 1-50, Attempts: 5). Difficulty should  progressively increase as the setting does (i.e easy range < normal range < hard range & easy attempts > normal attempts > hard attempts), not bounce around as it currently does.
+    4. Game does not restart when changing difficulty, leading to a problamatic mid-game rollover. When changing difficulty, game should completely reset and call a new secret number.
+    5. The "New Game" button does not change the game's state while resetting the game, meaning if the user already won or lost, they are unable to play again as intended because they are locked out of submitting any more guesses.
+    6. "History" and "Score" data persists between games, despite the fact that they should reset instead.
+    7. User is able to input erroneous data (outside of denoted range, non-numeric, non-integer decimal) and the guess still counts against the user's attempts. Erroneous data should not be allowed to be inputted, or should be handle, without decrementing the user's number of attempts left.
+    8. The UI element under the "Make a guess" title has the text "Guess a number between 1 and 100..." irrelavent of the set difficulty. This display should be dynamic, showing the corrrect range for the selected difficulty.
+    9. The secret number is always a random number between 1 and 100, irrelavent of the set difficulty. The secret number should be clamped to the range outlined by the selected difficulty.
     10. On even submission attempts (i.e. 0, 2, 4) when the player guesses too high, score is increased by 5 points instead of being decreased by that amount.
     11. On game's initialization, the "attempts" variable is set to 1 (i.e. the user has submitted one guess), number of attempts should always start at 0.
+    12. When submitting a guess, the "History" data is not updated until the next page update. This variable should immediately update as to allow the user to know what guesses they have already provided.
 
 ---
 
@@ -36,10 +37,10 @@ Answer each question in 3 to 5 sentences. Be specific and honest about what actu
 ## 3. Debugging and testing your fixes
 
 - How did you decide whether a bug was really fixed?
-    In order to assert that a bug was actually corrected, I utilized diverse redundency via the engineer's logical deduction, AI generated unit tests, and player's quality assurance testing. For logical deduction, I anaylized the suggested and actual changes the AI made to the codebase. If the bug was truly corrected, I should be able to articulate what caused it and how the changes circumnavigated that original execution. Similarly, when operating the software, a fixed bug simply wouldn't be experienced post fix, allowing basic quality asssurance testing to greatly facilitate testing and confirmation. Finally, the AI was able to generate unit tests which, with programmer's scrutiny, could offer a data-driven test of the execution.
+    In order to assert that a bug was actually corrected, I utilized diverse redundency via the engineer's logical deduction, AI generated unit tests (when possible), and player's quality assurance testing. For logical deduction, I anaylized the suggested and actual changes the AI made to the codebase. If the bug was truly corrected, I should be able to articulate what caused it and how the changes circumnavigated that original execution. Similarly, when operating the software, a fixed bug simply wouldn't be experienced post fix, allowing basic quality asssurance testing to greatly facilitate testing and confirmation. Finally, the AI was able to generate unit tests which, with programmer's scrutiny, could offer a data-driven test of the execution.
 - Describe at least one test you ran (manual or using pytest)  
   and what it showed you about your code.
-    
+    When I discovered Bug ID #4, I was looking at the Developer Debug Info while providing inputs to UI elements. When altering the index of the difficulty selection box, I discovered that the game will rollover without resetting. This had the potential to cause significant issues to the user experience, such as the secret number potentially not being in the denoted range, the user not getting their full number of attempts, and data variable, such as score and history, being persistant betweeen runs. These issues would irritatingly force users to input an additional new game prompt if they decided their current difficulty was too easy or hard mid game. Through this test, I discovered that there was no branch in the codebase that directly handled inputs from the difficulty selection box, with any alterations to the game's settings being made as an afterword rather than reactively as it should have.
 - Did AI help you design or understand any tests? How?
     In order to increase my familiarity with AI and prompt engineering, I extensively utilzed AI to create and modify unit tests. After fixing each bug, I would request the AI to propose a set of unit tests to thoroughly ensure the bug was taken care of. I would extensively scrutinize the yield from this prompt, which I took significant time to ensure was clear and detailed, taking time to understand the premise of the porposed unit test, what it tested, and its manner of execution. Typically, this process was completed through a single handshake but occasionally required several iterations to refine the tests, concluding with the AI being instructed to make their proposed alterations to the codebase.
 
@@ -52,7 +53,7 @@ Answer each question in 3 to 5 sentences. Be specific and honest about what actu
 - How would you explain Streamlit "reruns" and session state to a friend who has never used Streamlit?
     A Streamlit rerun is a complete repeated execution of the associated script, without variable persistance. A rerun occurs when the application needs to update, such as when an input is registered or the "rerun" command is executed. Dispite variables not persisting, state information for UI elements and data added, or modified, within the "session_state" object do persist. The session state can be thought of like a dictionary that persists between reruns, maintaining key/value pairs to be called and which can be overwritten and saved by the script during its execution. This allows the application to remember and react to user interactions while maintain the page's layout and critical data.
 - What change did you make that finally gave the game a stable secret number?
-    
+    The secret number was stable at the point of my initial testing, it did not change unless a "New Game" prompt was submitted. However, the claim could be made that it was overly stable, not being altered when the difficulty setting was changed, or erroneous, as it always pulled from the range of 1-100. The prior bug was fixed with Bug ID #4 in Commit ID #---, . The later one was fixed with Bug ID #9 in Commit ID #10, when line 110 of app.py was change to utilize the low, high variables for the selected range.
 
 ---
 

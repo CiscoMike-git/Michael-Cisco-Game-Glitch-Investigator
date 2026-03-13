@@ -29,7 +29,7 @@ low, high = get_range_for_difficulty(difficulty)
 st.sidebar.caption(f"Range: {low} to {high}")
 st.sidebar.caption(f"Attempts allowed: {attempt_limit}")
 
-if "secret" not in st.session_state:
+if "secret" not in st.session_state: 
     st.session_state.secret = random.randint(low, high)
 
 if "attempts" not in st.session_state:
@@ -87,19 +87,16 @@ if st.session_state.status != "playing":
         st.error("Game over. Start a new game to try again.")
     st.stop()
 
-if submit:
+if submit: # FIXME: Bug ID #2 - fix last, bug may be a multiple of other bugs
     ok, guess_int, err = parse_guess(raw_guess, low, high)
 
     if not ok:
-        st.session_state.history.append(raw_guess)
         st.error(err)
-    else:
+    else: # FIXME: Bug ID #12
         st.session_state.attempts += 1
         st.session_state.history.append(guess_int)
 
-        secret = st.session_state.secret # FIXME: Bug ID #2 - fix last, bug may be a multiple of other bugs
-
-        outcome, message = check_guess(guess_int, secret)
+        outcome, message = check_guess(guess_int, st.session_state.secret)
 
         if show_hint:
             st.warning(message)
