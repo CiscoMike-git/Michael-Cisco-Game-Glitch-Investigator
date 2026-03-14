@@ -9,7 +9,7 @@ Answer each question in 3 to 5 sentences. Be specific and honest about what actu
 - List at least two concrete bugs you noticed at the start  
   (for example: "the secret number kept changing" or "the hints were backwards").
     1. If the "show hint" option is on and the player inputs an incorrect number, the hint output will falsely prompt the user, causing their guesses to shift further away form the secret number rather than closer to it.
-    2. If the "show hint" option is on and the player submits two consecutive inputs that would uniquely branch within the code, then a hint output will not be displayed contrary to intent.
+    2. If the "show hint" option is on and the player submits two consecutive inputs that would each output a unique message type (e.i. st.success, st.error, st.warning), then a hint output will not be displayed contrary to intent.
     3. The various difficulty settings are as followed: "Easy" mode (Range: 1-20, Attempts: 6), "Normal" mode (Range: 1-100, Attempts: 8), and "Hard" mode (Range: 1-50, Attempts: 5). Difficulty should  progressively increase as the setting does (i.e easy range < normal range < hard range & easy attempts > normal attempts > hard attempts), not bounce around as it currently does.
     4. Game does not restart when changing difficulty, leading to a problamatic mid-game rollover. When changing difficulty, game should completely reset and call a new secret number.
     5. The "New Game" button does not change the game's state while resetting the game, meaning if the user already won or lost, they are unable to play again as intended because they are locked out of submitting any more guesses.
@@ -66,3 +66,14 @@ Answer each question in 3 to 5 sentences. Be specific and honest about what actu
     The next time I work with AI on a coding task, especially if its a project or exercise, I want to preface the AI to not give me answers before I ask for them. I found that upon doing the initial "#file:app.py" command, the AI appeared to give me the predetermined answers, as outlined by CodePath, to the project. This made trying to ernestly find and repair additional bugs in a learning manner difficult as I suddenly knew CodePath's intenstions rather than needing to critically think myself.
 - In one or two sentences, describe how this project changed the way you think about AI generated code.
     Prior to this project, I interpeted "Vibe/AI Coding" as asking an AI to generate code and going with whatever it produced. I am pleasantly surprised to learn it is, when used correctly, a tool to assist coding rather than a solution generator.
+
+---
+
+## 6. Challenge 5
+
+- Explain the bug and AI models that were utilized for the comparison?
+    The bug in question was Bug ID #7, which covered erroneous data being accepted while still decrementing the number of attempts left. The two AI models called on to solve this problem were Claude Code during the bug fixing stage and Github Copilot after the bug was fixed, reflecting on it.
+- How did the prompting between the two models differ?
+    As I was attempting to figure out the bug, Claude Code was faced with less user derived information during prompting and wasn't explicitly told to explain the bug. On the other hand, as Github Copilot was reflecting on the bug after the fact, it was able to pull the full updated bug report and was explicitly told to exxplain the bug. 
+- How did each model's answers compare?
+    While the totality of each model's suggestions were identical in solving the problem, it appears that Github Coplit required more prompting to explain the bug over Claude Code which needed more information to diagnose. Additionally, Claude Code presented the suggestion in a more concise and readable manner, providing lists and modifying format when applicable. Github Copilot, on the other hand, created a wall of text that was difficult to read in select places. Between the two, I definitly perfered Claude Code over Github Copilot as Claude Code required less, gave more, and was easier to comprehend.
