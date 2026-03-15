@@ -50,7 +50,7 @@ if "difficulty" not in st.session_state:
 st.subheader("Make a guess")
 
 st.info(
-    f"Guess a number between {low} and {high}. " # FIX: Bug ID #8 - Replaced hardcoded range with dynamic low/high variables via Claude Code
+    f"Guess a number between {low} and {high}. " # FIX: Bug ID #8 - Replaced hardcoded range with dynamic low, high variables via Claude Code
     f"Attempts left: {attempt_limit - st.session_state.attempts}"
 )
 
@@ -97,7 +97,7 @@ if submit: # FIXME: Bug ID #2 - fix last, bug may be a multiple of other bugs
     if not ok:
         st.error(err)
     else: # FIXME: Bug ID #12
-        st.session_state.attempts += 1
+        st.session_state.attempts += 1 # FIX: Bug ID #7 - Moved the "attempts" increment to be within the input accepted block via Claude Code
         st.session_state.history.append(guess_int)
 
         outcome, message = check_guess(guess_int, st.session_state.secret)
